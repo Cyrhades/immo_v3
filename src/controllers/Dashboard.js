@@ -5,9 +5,9 @@ module.exports = class DashboardController extends AbstractController {
     print(request, response) {
         if(typeof request.session.user !== 'undefined') {
             response.render('admin/dashboard/index');
-            return;
+        } else {
+            response.redirect('/connexion');  
         }
-        response.redirect('/connexion');  
     }
 
 };

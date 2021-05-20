@@ -1,0 +1,172 @@
+extends ../layout.pug
+
+
+block breadcrumb  
+    li
+        a(href='#')
+            em(class='fa fa-home')
+        li(class='active') &nbsp; Les biens
+        
+block content
+    .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center.pt-3.pb-2.mb-3.border-bottom
+        h1.h2 Enregistrer un bien
+        .btn-toolbar.mb-2.mb-md-0
+            a.btn.btn-small.btn-secondary(href="/admin/product") Liste des biens
+    .row
+        form(role="form" method="post" enctype="multipart/form-data")
+            input(type="hidden" name="csrf" value=csrf)
+            .row
+                .col-xs-12.col-lg-6 
+                    fieldset
+                        legend Adresse du bien
+                        .col-lg-12 
+                            .form-group
+                                | !{form.error["realty[seller]"]} 
+                                | !{form.row["realty[seller]"]}
+                        .col-lg-12 
+                            .form-group
+                                | !{form.error["realty[address1]"]} 
+                                | !{form.row["realty[address1]"]}
+                        .col-lg-12 
+                            .form-group
+                                | !{form.error["realty[address2]"]} 
+                                | !{form.row["realty[address2]"]}
+                        .col-lg-6
+                            .form-group
+                                | !{form.error["realty[zipcode]"]} 
+                                | !{form.row["realty[zipcode]"]}
+                        .col-lg-6 
+                            .form-group
+                                | !{form.error["realty[city]"]} 
+                                | !{form.row["realty[city]"]}
+                        .col-lg-12 
+                            .form-group
+                                label Informations complémentaires
+                                textarea.form-control(name="realty[info_address]" style="height:200px;width:100%;" placeholder="Distances des transports en commun, commerces de proximités, etc")
+                .col-xs-12.col-lg-6  
+                    fieldset
+                        legend Contact du bien
+                        
+                        | !{form.error["contact[civility]"]} 
+                        .input-group.mb-3
+                            .input-group-prepend
+                                .input-group-text.d-none.d-lg-block 
+                                    i.fa.fa-restroom
+                            | !{form.widget["contact[civility]"]}
+
+
+                        | !{form.error["contact[lastname]"]} 
+                        .input-group.mb-3
+                            .input-group-prepend
+                                .input-group-text.d-none.d-lg-block
+                                    i.fa.fa-user
+                            | !{form.widget["contact[lastname]"]}
+
+
+                        | !{form.error["contact[firstname]"]} 
+                        .input-group.mb-3
+                            .input-group-prepend
+                                .input-group-text.d-none.d-lg-block 
+                                    i.fa.fa-user
+                            | !{form.widget["contact[firstname]"]}
+
+                        
+                        | !{form.error["contact[email]"]} 
+                        .input-group.mb-3
+                            span.input-group-prepend
+                                span.input-group-text.d-none.d-lg-block 
+                                    i.fa.fa-envelope 
+                            | !{form.widget["contact[email]"]}         
+
+                        | !{form.error["contact[phone]"]} 
+                        .input-group.mb-3
+                            .input-group-prepend
+                                .input-group-text.d-none.d-lg-block
+                                    i.fa.fa-phone
+                            | !{form.widget["contact[phone]"]}
+
+                        | !{form.error["contact[mobile]"]} 
+                        .input-group.mb-3
+                            .input-group-prepend
+                                .input-group-text.d-none.d-lg-block
+                                    i.fa.fa-phone
+                            | !{form.widget["contact[mobile]"]}
+                        .form-group
+                            label Informations complémentaires
+                            textarea.form-control(name="contact[info]" style="height:90px;width:100%;" placeholder="Disponibilités")
+            .row
+                .col 
+                    fieldset
+                        legend Informations du bien
+                        .row
+                            .col-xs-12.col-lg-6  
+                                .row
+                                    .form-group
+                                        | !{form.error["realty[type]"]} 
+                                        | !{form.row["realty[type]"]}
+                            
+                                    .form-group
+                                        | !{form.error["realty[price]"]} 
+                                        | !{form.row["realty[price]"]}
+                        
+                                    .form-group
+                                        | !{form.error["realty[amount_commission]"]} 
+                                        | !{form.row["realty[amount_commission]"]}
+                                       
+                                    .form-group
+                                        | !{form.error["realty[amount_commission]"]} 
+                                        | !{form.row["realty[percentage_commission]"]}
+                                        
+                            .col-xs-12.col-lg-6  
+                                .row                 
+                                    .lcUpload__block
+                                        .lcUpload__input
+                                            input.lcUpload__file(type="file" name="photos" id="file" data-multiple-caption="{count} fichiers sélectionnés" multiple)
+                                            label(for="file")
+                                                strong Choisissez le fichier
+                                                span.lcUpload__dragndrop  ou glissez le ici
+                        //- Ajouter la liste des images existantes et permettre la suppression
+                        .row
+                            .col-xs-12.col-lg-6    
+                                .form-group
+                                    | !{form.error["realty[area]"]} 
+                                    | !{form.row["realty[area]"]}
+                            .col-xs-12.col-lg-6 
+                                .form-group
+                                    | !{form.error["realty[room]"]} 
+                                    | !{form.row["realty[room]"]}
+                            .col-xs-12.col-lg-6  
+                                .form-group
+                                    | !{form.error["realty[type_product]"]} 
+                                    | !{form.row["realty[type_product]"]}
+                        .col-lg-12 
+                            .form-group
+                                label Informations complémentaires sur le bien
+                                textarea.form-control(name="realty[info_realty]" style="height:90px;width:100%;" placeholder="Travaux à effectuer, classe énergie, GES, etc")
+        
+                        textarea#homeRoughData(name="realty[plan]" style="display:none;")
+
+            .row.justify-content-center.mt-3
+                .col-2
+                    button#openHomeRoughEditor.btn.btn-success(type="button" data-bs-toggle="modal" data-bs-target="#planModal") Editer le plan
+                .col-2
+                    button.btn.btn-primary(type="submit") Enregistrer
+
+    #planModal.modal.fade(data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="planModalTitle" aria-hidden="true")
+        .modal-dialog.modal-fullscreen.modal-dialog-centered(role="document")
+            .modal-content
+                .modal-header
+                    h5#planModalTitle.modal-title Création du plan
+                    button(type="button" class="close" data-bs-dismiss="modal" aria-label="Close")
+                        span(aria-hidden="true") &times;
+
+                .modal-body 
+                    <iframe name="homeRoughEditor" src="/homeRoughEditor/index.html" style="width:100%; height:100%;"></iframe>
+                    //--include realty/plan.pug
+
+                .modal-footer
+                    //- button.btn.btn-secondary(type="button" class="" data-bs-dismiss="modal") Fermer
+                    button#saveHomeRough.btn.btn-primary(type="button" data-bs-dismiss="modal") Enregistrer
+
+    block scripts 
+         script(src="/js/saveHomeRough.js")

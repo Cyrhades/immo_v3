@@ -38,6 +38,7 @@ module.exports = class ContactController extends AbstractController {
             wait = Promise.resolve(new ContactEntity());
         }
 
+        
         wait.then((contact) => {
             // préparation du formulaire
             let form = new ContactType(contact);

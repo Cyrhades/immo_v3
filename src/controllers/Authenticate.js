@@ -19,16 +19,20 @@ module.exports = class Authenticate extends AbstractController {
             (new UserRepository).findByEmail(request.body.email).then((result) => {
                 if( typeof result != 'undefined') {
                     let bcrypt = require('bcryptjs');
+                    console.log(bcrypt.compareSync(request.body.password, result.password));
                     if(bcrypt.compareSync(request.body.password, result.password)) {
                         request.session.user = result;
                         request.flash('notify', 'Vous êtes maintenant connecté.');
                         response.redirect('/admin');
+                    } else {
+                        request.flash('error', `Erreur d'identification`);
+                        response.redirect('/connexion');
                     } 
                 } else {
                     request.flash('error', `Erreur d'identification`);
                     response.redirect('/connexion');
                 }                
-            }, (message) => {
+            }, () => {
                 request.flash('error', `Erreur d'identification`);
                 response.redirect('/connexion');
             });

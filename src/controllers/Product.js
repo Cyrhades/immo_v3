@@ -7,27 +7,10 @@ const ContactRepository = require('../repository/ContactRepository.js');
 const RealtyEntity = require('../entity/Realty.js');
 const RealtyRepository = require('../repository/RealtyRepository.js');
 
+const RealtyType = require('../form/RealtyType.js');
 
 module.exports = class ProductController extends AbstractController {
     
-    delete(request, response) {
-        let idProduct = 0;
-        if(typeof request.params != 'undefined' && typeof request.params.id != 'undefined') {
-            idProduct = parseInt(request.params.id);
-        }
-        if(idProduct > 0) {  
-            // On va supprimer les photos du produits
-            //config.directory_product_image+id_product+'/';
-            (new RealtyRepository(request)).delete({id : idProduct}).then(() => {
-                request.flash('notify', `Le bien a été supprimé`);
-                response.redirect('/admin/product');
-            });
-        } else {
-            request.flash('error', `Le bien n'a pas été supprimé une erreur est survenue`);
-            response.redirect('/admin/product');
-        }
-    }
-
     list(request, response) {
         let repo = (new RealtyRepository(request));
         let page = parseInt(request.query.page) || 1;
@@ -150,6 +133,63 @@ module.exports = class ProductController extends AbstractController {
             });
         } else {
             request.flash('error', `Le bien n'a pas été trouvé, une erreur est survenue`);
+            response.redirect('/admin/product');
+        }
+    }
+
+    formAddProcess2(request, response) {  
+        request = getFile.service('LcParserService')(request);
+
+        let wait = null;
+        // En cas de modification
+        if(typeof request.params != 'undefined' && typeof request.params.id != 'undefined') {
+            wait = new Promise((resolve,reject) => {
+                (new RealtyRepository(request)).findBy({id : request.params.id}).then((realty) => {
+                    if(realty.length == 1 && realty[0].id_contact > 0) {
+                        (new ContactRepository(request)).findBy({id : realty[0].id_contact}).then((contact) => {
+                            resolve({
+                                'realty' : this.dataToEntity(realty[0], new RealtyEntity()),
+                                'contact' : this.dataToEntity(contact[0], new ContactEntity())
+                            });
+                        });
+                    } else { reject(); }
+                });
+            });
+        } else {
+            wait = Promise.resolve(new RealtyEntity(), new ContactEntity());
+        }
+
+        wait.then((realty) => {  
+            console.log(realty);
+            // préparation du formulaire
+            let form = new RealtyType(realty);
+            form.handler(request);
+            // si formulaire soumis
+            if(form.isSubmit()) {
+                response.render('admin/product/form_add2', {form : form.createView()} );
+            }
+            else {
+                console.log(form.createView());
+                response.render('admin/product/form_add2', {form : form.createView()} );
+            }
+        });
+    }
+
+
+    delete(request, response) {
+        let idProduct = 0;
+        if(typeof request.params != 'undefined' && typeof request.params.id != 'undefined') {
+            idProduct = parseInt(request.params.id);
+        }
+        if(idProduct > 0) {  
+            // On va supprimer les photos du produits
+            //config.directory_product_image+id_product+'/';
+            (new RealtyRepository(request)).delete({id : idProduct}).then(() => {
+                request.flash('notify', `Le bien a été supprimé`);
+                response.redirect('/admin/product');
+            });
+        } else {
+            request.flash('error', `Le bien n'a pas été supprimé une erreur est survenue`);
             response.redirect('/admin/product');
         }
     }

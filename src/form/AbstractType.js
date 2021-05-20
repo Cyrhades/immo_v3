@@ -50,16 +50,27 @@ module.exports = class AbstractType {
 
     createView() {
         let fields = {label:{}, widget:{}, row:{}, error:{}};
-        Object.keys(this.fieldsForm).forEach((key) => {
-            fields.label[key] = this.getLabel(key);
-            fields.widget[key] = this.getField(key);
-            fields.row[key] = fields.label[key]+' '+fields.widget[key];
-            fields.error[key] = (typeof this.errors[key] != 'undefined' 
-                ? `<div class="alert alert-sm alert-danger">${this.errors[key]}</div>`
-                : ''
-            );
-        });
 
+        if(typeof this.groupFieldsForm != 'undefined') {
+            this.fieldsForm = [];
+            Object.keys(this.groupFieldsForm).forEach((nameGroup) => {
+                Object.keys(this.groupFieldsForm[nameGroup]).forEach((key) => {
+                    this.fieldsForm[`${nameGroup}[${key}]`] = this.groupFieldsForm[nameGroup][key]; 
+                });
+            });
+        }
+
+        if(typeof this.fieldsForm != 'undefined') {
+            Object.keys(this.fieldsForm).forEach((key) => {
+                fields.label[key] = this.getLabel(key);
+                fields.widget[key] = this.getField(key);
+                fields.row[key] = fields.label[key]+' '+fields.widget[key];
+                fields.error[key] = (typeof this.errors[key] != 'undefined' 
+                    ? `<div class="alert alert-sm alert-danger">${this.errors[key]}</div>`
+                    : ''
+                );
+            });
+        }
         return fields;
     }    
 
@@ -80,6 +91,7 @@ module.exports = class AbstractType {
                 case 'email' : 
                 case 'password' : 
                 case 'text' : 
+                case 'number' :
                 case 'tel' :
                     return  this.getInput(key, this.fieldsForm[key].type);
                     break;

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "browser-refresh server.js",
     "start": "node server.js",
-    "test": "mocha --recursive --exit"
+    "test": "mocha --recursive --timeout 5000 --exit"
   },
   "author": "LECOMTE Cyril",
   "license": "ISC",

@@ -107,7 +107,7 @@ module.exports = class AbstractRepository {
 
     connect() {
         if(config.type_db == 'mysql' || config.type_db == 'mongodb') {
-            this.db = require(`../../app/database/connect.${config.type_db}.js`)
+            this.db = require(`../../app/database/connect.${config.type_db}.js`)(config)
         }
         return this.db;
     }
