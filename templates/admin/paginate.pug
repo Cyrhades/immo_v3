@@ -1,0 +1,56 @@
+//- on affiche la pagination uniquement si il y a plus d'une page
+if last > 1
+    nav.d-flex.justify-content-end
+        ul.pagination
+            if page == 1
+                li.page-item.disabled
+                    a.page-link(href="javascript:;") Précédent
+            else 
+                li.page-item
+                    a.page-link(href=route+"?page="+(page-1)) Précédent
+            
+            //- si il y a 10 pages Max on affiche tout    
+            if last <= 10
+                - var i = 1;
+                while i < last+1    
+                    if i==page   
+                        li.page-item.active
+                            a.page-link(href=route+'?page='+i)= i++ 
+                    else                     
+                        li.page-item
+                            a.page-link(href=route+'?page='+i)= i++ 
+            //- Si il y a plus de 10 pages on va devoir splitter
+            else 
+                - var i = 1;
+                while i < last/2   
+                    if i==page   
+                        li.page-item.active
+                            a.page-link(href=route+'?page='+i)= i++ 
+                    else                     
+                        li.page-item
+                            a.page-link(href=route+'?page='+i)= i++ 
+                //- On milieu, on affiche ... 
+                li.page-item.disabled.sep 
+                    if page>(last/2) && page<last-3
+                        li.page-item.active
+                            //- Si la page en cours et dans cette zone on l'écrit 
+                            a.page-link(href=route+'?page='+page) ... #{page} ...  
+                    else
+                        a.page-link ...
+
+                - var i = last-3;
+                while i <= last   
+                    if i==page   
+                        li.page-item.active
+                            a.page-link(href=route+'?page='+i)= i++
+                    else                     
+                        li.page-item
+                            a.page-link(href=route+'?page='+i)= i++
+
+            //- Le bouton suivant ne doit être actif que si on est pas sur la derniere page
+            if page >= last
+                li.page-item.disabled
+                    a.page-link(href="javascript:;") Suivant
+            else 
+                li.page-item
+                    a.page-link(href=route+"?page="+(page+1)) Suivant

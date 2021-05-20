@@ -1,0 +1,60 @@
+extends ../layout.pug
+
+block breadcrumb  
+    li
+        a(href='#')
+            em(class='fa fa-home')
+        li(class='active') &nbsp; Les biens
+        
+
+block content
+    .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center.pt-3.pb-2.mb-3.border-bottom
+        h1.h2 Liste des biens
+        .btn-toolbar.mb-2.mb-md-0
+            a.btn.btn-small.btn-primary(href="/admin/product/add") Ajouter un bien
+ 
+    .row
+        .col-md-12
+            .panel.panel-container
+                table.table.table-hover
+                    thead 
+                        tr 
+                            th.bs-checkbox 
+                                input(name="btSelectAll" type="checkbox")
+                            th Vendeur 
+                            th Address 
+                            th Description  
+                            th(style="width:1%;")  
+                            th(style="width:1%;")  
+                    tbody 
+                        each product in products 
+                            tr 
+                                td.bs-checkbox 
+                                    input(data-index=product.id value=product.id name="product[]" type="checkbox")
+                                td= product.seller
+                                td
+                                    | #{product.address1}
+                                    br
+                                    | #{product.zipcode} #{product.city}
+                                td
+                                    if product.type == 1 
+                                        span Maison #{product.area}m² - #{product.room} piece(s)
+                                    else if product.type == 2
+                                        span Appartement  #{product.area}m² - #{product.room} piece(s)
+                                    else if product.type == 3
+                                        span Terrain  #{product.area}m²
+                                    else if product.type == 4
+                                        span Parking
+                                    else if product.type == 5
+                                        span Local / Bureau
+                                    else 
+                                        span Autre
+                                    
+                                td
+                                    a.btn.btn-primary(href='/admin/product/edit/'+product.id) 
+                                        i.fa.fa-pen
+                                td
+                                    a.btn.btn-danger(href='/admin/product/delete/'+product.id) 
+                                        i.fa.fa-trash
+
+                include ../paginate.pug

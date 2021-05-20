@@ -1,0 +1,25 @@
+DROP TABLE IF EXISTS `realty`;
+CREATE TABLE IF NOT EXISTS `realty` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_contact` int(11) NOT NULL,
+  `seller` varchar(80) DEFAULT NULL,
+  `address1` varchar(80) DEFAULT NULL,
+  `address2` varchar(80) DEFAULT NULL,
+  `zipcode` varchar(10) DEFAULT NULL,
+  `city` varchar(80) DEFAULT NULL,
+  `info_address` text DEFAULT NULL,
+  `type` enum('1','2','3','4','5','6') NOT NULL COMMENT '1=Maison, 2=Appartement, 3=Terrain, 4=Parking, 5=Local / Bureau, 6=Autres',
+  `area` int(11) DEFAULT NULL,
+  `room` int(2) DEFAULT NULL,
+  `type_product` enum('1','2','3') NOT NULL COMMENT '1=Ancien, 2=Neuf, 3=Viager',
+  `price` float DEFAULT NULL,
+  `amount_commission` float DEFAULT NULL,
+  `percentage_commission` float DEFAULT NULL,
+  `info_realty` text DEFAULT NULL,
+  `plan` text NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `updated_by` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;

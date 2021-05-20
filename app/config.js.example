@@ -1,0 +1,29 @@
+module.exports = {
+    appKey: '<APP_KEY>',
+    websiteName: '<WEBSITE_NAME>',
+    port : <HTTP_PORT>,
+    directory_product_image : __dirname+'/../public/images/products/',
+    /*
+    type_db: 'mongodb',
+    db : {
+        cluster: '',
+        user : '',
+        pwd: '',
+        dbname: ''
+    }*/
+    type_db: 'mysql',
+    db : {
+        host     : '',
+        user     : '',
+        password : '',
+        port     : 3306,
+        database : ''
+    },
+    smtp: {
+        service: 'gmail',
+        auth: {
+            user: <ADRESSE_EMAIL_GMAIL>,
+            pass: <PASSWORD_GMAIL>
+        }
+    }
+};

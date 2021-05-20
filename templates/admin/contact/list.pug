@@ -1,0 +1,45 @@
+extends ../layout.pug
+
+block breadcrumb  
+    li
+        a(href='#')
+            em(class='fa fa-home')
+        li(class='active') &nbsp; Les contacts
+         
+
+block content
+    .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center.pt-3.pb-2.mb-3.border-bottom
+        h1.h2 Liste des contacts
+        .btn-toolbar.mb-2.mb-md-0
+            a.btn.btn-small.btn-primary(href="/admin/contact/add") Ajouter un contact
+ 
+    .row
+        .col-md-12
+            .panel.panel-container
+                table.table.table-hover
+                    thead 
+                        tr 
+                            th.bs-checkbox 
+                                input(name="btSelectAll" type="checkbox")
+                            th Nom 
+                            th Email 
+                            th Télphone  
+                            th(style="width:1%;")  
+                            th(style="width:1%;")  
+                    tbody 
+                        each contact in contacts 
+                            tr 
+                                td.bs-checkbox 
+                                    input(data-index=contact.id value=contact.id name="contact[]" type="checkbox")
+                                td= contact.firstname+' '+contact.lastname
+                                td= contact.email
+                                td= contact.phone
+                                    
+                                td
+                                    a.btn.btn-primary(href='/admin/contact/edit/'+contact.id) 
+                                        i.fa.fa-pen
+                                td
+                                    a.btn.btn-danger(href='/admin/contact/delete/'+contact.id) 
+                                        i.fa.fa-trash
+
+                include ../paginate.pug

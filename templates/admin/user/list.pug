@@ -1,0 +1,47 @@
+extends ../layout.pug
+
+block breadcrumb  
+    li
+        a(href='#')
+            em(class='fa fa-home')
+        li(class='active') &nbsp; Les collaborateurs
+         
+
+block content
+    .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center.pt-3.pb-2.mb-3.border-bottom
+        h1.h2 Liste des collaborateurs
+        .btn-toolbar.mb-2.mb-md-0
+            a.btn.btn-small.btn-primary(href="/admin/user/add") Ajouter un collaborateur
+ 
+    .row
+        .col-md-12
+            .panel.panel-container
+                table.table.table-hover
+                    thead 
+                        tr 
+                            th.bs-checkbox 
+                                input(name="btSelectAll" type="checkbox")
+                            th Nom 
+                            th Email 
+                            th Télphone  
+                            th(style="width:1%;")  
+                            th(style="width:1%;")  
+                    tbody 
+                        each user in users 
+                            tr 
+                                td.bs-checkbox 
+                                    input(data-index=user.id value=user.id name="user[]" type="checkbox")
+                                td= user.firstname+' '+user.lastname
+                                td= user.email
+                                td= user.phone
+                                    
+                                td
+                                    a.btn.btn-primary(href='/admin/user/edit/'+user.id) 
+                                        i.fa.fa-pen
+                                td
+                                    a.btn.btn-danger(href='/admin/user/delete/'+user.id) 
+                                        i.fa.fa-trash
+
+                include ../paginate.pug
+
+
