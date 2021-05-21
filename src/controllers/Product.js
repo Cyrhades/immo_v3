@@ -54,7 +54,7 @@ module.exports = class ProductController extends AbstractController {
                     
                     let contact = this.formToEntity(form.entity('contact'), data.contact); 
                     let realty = this.formToEntity(form.entity('realty'), data.realty);
-                    console.log(realty);
+
                     let promise = new Promise((resolve, reject) => {
                         // modification d'un bien
                         if(     typeof contact.id != 'undefined' && contact.id > 0

@@ -180,6 +180,15 @@ module.exports = class RealtyType extends AbstractType {
                         placeholder : "Travaux à effectuer, classe énergie, GES, etc"
                     }
                 },
+                plan : {
+                    required: false,
+                    label : false,
+                    type : 'textarea',
+                    id : 'homeRoughData',
+                    attr : {                        
+                        style : "dhisplay:none;"
+                    }
+                },
             },
             contact : {
                 email : {

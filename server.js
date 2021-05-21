@@ -31,15 +31,6 @@ app.use(sassMiddleware({
     outputStyle: 'compressed'
 }));
 
-//-- Mode dev : auto-connexion
-app.use((req,res,next) => {
-    req.session.user = {
-        firstname : 'Cyril',
-        lastname : 'LECOMTE',
-    };
-    next();
-});
-
 //--------------------------------------------------------------------
 //       permet d'envoyer des variables à toutes les vues
 //-------------------------------------------------------------------- 

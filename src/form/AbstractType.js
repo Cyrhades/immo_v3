@@ -116,16 +116,27 @@ module.exports = class AbstractType {
         }
     }
 
-    getLabel(key) {
+    getLabel(key) {        
         if(typeof this.fieldsForm[key].label != 'undefined' && this.fieldsForm[key].label !== false) {
-            return `<label for="${key}">${this.fieldsForm[key].label}</label>`;   
+            let attrs = ` name="${key}"`;
+            if(typeof this.fieldsForm[key].id != 'undefined') {
+                return `<label for="${this.fieldsForm[key].id}">${this.fieldsForm[key].label}</label>`;   
+            } else {
+                return `<label for="${key}">${this.fieldsForm[key].label}</label>`;   
+            }
+            
         } else {
             return  ``;
         }
     }
 
     getInput(key, type) {
-        let attrs = ` id="${key}" name="${key}"`;
+        let attrs = ` name="${key}"`;
+        if(typeof this.fieldsForm[key].id != 'undefined') {
+            attrs += ` id="${this.fieldsForm[key].id}"`;
+        } else {
+            attrs += ` id="${key}"`;
+        }
         if(typeof this.fieldsForm[key].maxlength != 'undefined') {
             attrs += ` maxlength="${this.fieldsForm[key].maxlength}"`;
         }
@@ -180,7 +191,12 @@ module.exports = class AbstractType {
     } 
     
     getTextarea(key) {
-        let attrs = ` id="${key}" name="${key}"`;
+        let attrs = ` name="${key}"`;
+        if(typeof this.fieldsForm[key].id != 'undefined') {
+            attrs += ` id="${this.fieldsForm[key].id}"`;
+        } else {
+            attrs += ` id="${key}"`;
+        }
         if(typeof this.fieldsForm[key].maxlength != 'undefined') {
             attrs += ` maxlength="${this.fieldsForm[key].maxlength}"`;
         }
@@ -227,7 +243,12 @@ module.exports = class AbstractType {
 
     getSelect(key) {
         let options = '';
-        let attrs = ` id="${key}" name="${key}"`;
+        let attrs = ` name="${key}"`;
+        if(typeof this.fieldsForm[key].id != 'undefined') {
+            attrs += ` id="${this.fieldsForm[key].id}"`;
+        } else {
+            attrs += ` id="${key}"`;
+        }
         if(typeof this.fieldsForm[key].required != 'undefined' && this.fieldsForm[key].required === true) {
             attrs += ` required`;
         }
