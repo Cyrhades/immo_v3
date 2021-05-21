@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `lastname` varchar(40) NOT NULL,
   `firstname` varchar(40) NOT NULL,
   `phone` varchar(15) NOT NULL,
+  `role` varchar(40) NOT NULL DEFAULT 'user',
   `created_at` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
   `updated_at` datetime NOT NULL,

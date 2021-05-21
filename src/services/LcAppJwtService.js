@@ -27,7 +27,10 @@ module.exports = (app) => {
         if(typeof res.locals.user.role != 'undefined' && res.locals.user.role == 'admin') {
             next();
             return;
-        } 
+        } else if(req._parsedUrl.pathname === '/admin') {
+            res.redirect('/connexion'); 
+            return;
+        }
         return res.sendStatus(401);
     });
 }

@@ -2,50 +2,51 @@ const urlencodedParser = require('body-parser').urlencoded({extended: true});
 const uploadFile = require('express-fileupload')({createParentPath: true});
 const csrf = require('../src/middleware-express/ho-csrf.js');
 let errorsHTTP = require('./errorsHTTP.js')();
-let loader = require('./getFiles.js');
+let getFile = require('./getFiles.js')();
 
 module.exports = (app) => {
+   // Ajout du middleware de gestion des JWT
+   getFile.service('LcAppJwtService')(app);
 
     // ACCUEIL
     app.route("/")
-        .get(loader().controller('Home').print)
+        .get(getFile.controller('Home').print)
         .all(errorsHTTP.error405);
     
     // MOT DE PASSE OUBLIE
     app.route("/mot_de_passe_oublie")
-        .get(csrf.token, loader().controller('ResetPassword').print)        
+        .get(csrf.token, getFile.controller('ResetPassword').print)        
         .post(urlencodedParser, csrf.verify,  (req, res, next) => {
             // cas particulier ou on envoi l'app pour générer l'email à partir d'un template
             // on a donc besoin de l'app express pour utiliser render sans retourner une réponse 
-            loader().controller('ResetPassword').process(req, res, app)
+            getFile.controller('ResetPassword').process(req, res, app)
         })
         .all(errorsHTTP.error405);
 
 
     // CONNEXION
     app.route("/connexion")
-        .get(csrf.token, loader().controller('Authenticate').print)
-        .post(urlencodedParser, csrf.verify, loader().controller('Authenticate').process)
+        .get(csrf.token, getFile.controller('Authenticate').print)
+        .post(urlencodedParser, csrf.verify, getFile.controller('Authenticate').process)
         .all(errorsHTTP.error405);
 
     app.route("/deconnexion")
-        .get(loader().controller('Authenticate').disconnect)
+        .get(getFile.controller('Authenticate').disconnect)
         .all(errorsHTTP.error405);
     
     //...
     //-------------------------------------------------------------------------------------
     //                  ADMIN
     //-------------------------------------------------------------------------------------
-    //app.use('/admin', User.isConnected)
     // Dashboard
     app.route("/admin")
-        .get(loader().controller('Dashboard').print)
+        .get(getFile.controller('Dashboard').print)
         .all(errorsHTTP.error405);
     
     //-------------------------------------------------------------------------------------
     //                  Les produits
     //-------------------------------------------------------------------------------------
-    let Product = loader().controller('Product');
+    let Product = getFile.controller('Product');
     // Listing des Produits
     app.route("/admin/product")
         .get(Product.list)
@@ -71,7 +72,7 @@ module.exports = (app) => {
     //-------------------------------------------------------------------------------------
     //                  Les conacts
     //-------------------------------------------------------------------------------------
-    let Contact = loader().controller('Contact');
+    let Contact = getFile.controller('Contact');
     // Listing des contacts
     app.route("/admin/contact")
         .get(Contact.list)
@@ -98,7 +99,7 @@ module.exports = (app) => {
     //-------------------------------------------------------------------------------------
     //                  Les collaborateurs
     //-------------------------------------------------------------------------------------
-    let User = loader().controller('User');
+    let User = getFile.controller('User');
     // Listing des collaborateurs
     app.route("/admin/user")
         .get(User.list)
