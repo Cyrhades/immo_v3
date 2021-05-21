@@ -49,7 +49,7 @@ module.exports = class AbstractController {
                 let methodeSetKey = 'set'+key.charAt(0).toUpperCase()+key.substr(1);
                 // si une methode de setter Existe (il y a une particularité sur le champs)
                 if(methodeSetKey in entity) {
-                    eval(entity[methodeSetKey](form[key]));
+                    entity[methodeSetKey](form[key]);
                 } else {
                     // sinon on pousse directement
                     entity[key] = form[key];

@@ -173,6 +173,9 @@ module.exports = class AbstractType {
         if(typeof data[key] == 'string') {
             attrs += ` value="${data[key].replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;").replace(/"/g, "&quot;")}"`;        
         }
+        else if(typeof data[key] == 'number') {
+            attrs += ` value="${parseFloat(data[key])}"`;        
+        }
         return `<input type="${type}"${attrs}>`;   
     } 
     
