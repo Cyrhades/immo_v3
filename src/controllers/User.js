@@ -1,12 +1,10 @@
 const AbstractController = require('./AbstractController.js');
-const UserEntity = require('../entity/User.js');
-const UserRepository = require('../repository/UserRepository.js');
-const UserType = require('../form/UserType.js');
+const getFile = require('../../app/getFiles.js')();
 
 module.exports = class UserController extends AbstractController {
 
     list(request, response) {
-        let repo = (new UserRepository(request));
+        let repo = getFile.repository('UserRepository', request); 
         let page = parseInt(request.query.page) || 1;
         let limit = 10;
         let offset = (limit*page)-limit;
@@ -28,17 +26,17 @@ module.exports = class UserController extends AbstractController {
         // En cas de modification
         if(typeof request.params != 'undefined' && typeof request.params.id != 'undefined') {
             wait = new Promise((resolve,reject) => {
-                (new UserRepository(request)).findBy({id : request.params.id}).then((user) => {
-                    resolve(this.dataToEntity(user[0], new UserEntity()) );
+                getFile.repository('UserRepository', request).findBy({id : request.params.id}).then((user) => {
+                    resolve(this.dataToEntity(user[0], getFile.entity('User')) );
                 });
             });
         } else {
-            wait = Promise.resolve(new UserEntity());
+            wait = Promise.resolve(getFile.entity('User'));
         }
        
         wait.then((user) => {
             // préparation du formulaire
-            let form = new UserType(user);
+            let form = getFile.form('UserType', user);
             form.handler(request);
             // si formulaire soumis
             if(form.isSubmit()) {
@@ -53,9 +51,9 @@ module.exports = class UserController extends AbstractController {
                     if(typeof user.id != 'undefined' && user.id > 0) {
                         // on ne permet pas la modification du mot de passe depuis cette interface
                         delete user.password; 
-                        promise = (new UserRepository(request)).update(user);
+                        promise = getFile.repository('UserRepository', request).update(user);
                     } else {
-                        promise = (new UserRepository(request)).add(user);
+                        promise = getFile.repository('UserRepository', request).add(user);
                     }
                     promise.then((result) => {
                         if(typeof result != 'undefined' && result.insertId == 0) {
@@ -85,7 +83,7 @@ module.exports = class UserController extends AbstractController {
         }
 
         if(idUser > 0) {  
-            (new UserRepository(request)).delete({id :idUser}).then((result) => {
+            getFile.repository('UserRepository', request).delete({id :idUser}).then((result) => {
                 request.flash('notify', `Le collaborateur a été supprimé`);
                 response.redirect('/admin/user');
             });

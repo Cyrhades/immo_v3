@@ -1,6 +1,5 @@
 const AbstractController = require('./AbstractController.js');
-const UserRepository = require('../repository/UserRepository.js');
-const MailerService = require('../services/Mailer.js');
+const getFile = require('../../app/getFiles.js')();
 
 module.exports = class ResetPassword extends AbstractController {
     
@@ -9,12 +8,13 @@ module.exports = class ResetPassword extends AbstractController {
     }
 
     process(request, response, app) {
+        let MailerService = getFile.service('Mailer')
         let mailer = new MailerService();
         let email = request.body.email; 
         // On génére le mail
         app.render('mails/regenerate_password.pug', {}, function(err, html) {
             // On vérifie si l'adresse email existe dans notre NDD
-            (new UserRepository).existsEmail(email).then((result) => {
+            getFile.repository('UserRepository').existsEmail(email).then((result) => {
                 // si l'email existe
                 if(result) {
                     // on envoi le mail

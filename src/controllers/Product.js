@@ -1,17 +1,10 @@
-const getFile = require(`${__dirname}/../../app/getFiles.js`)();
 const AbstractController = require('./AbstractController.js');
-
-const ContactEntity = require('../entity/Contact.js');
-const ContactRepository = require('../repository/ContactRepository.js');
-const RealtyEntity = require('../entity/Realty.js');
-const RealtyRepository = require('../repository/RealtyRepository.js');
-
-const RealtyType = require('../form/RealtyType.js');
+const getFile = require('../../app/getFiles.js')();
 
 module.exports = class ProductController extends AbstractController {
     
     list(request, response) {
-        let repo = (new RealtyRepository(request));
+        let repo = getFile.repository('RealtyRepository', request);
         let page = parseInt(request.query.page) || 1;
         let limit = 10;
         let offset = (limit*page)-limit;
@@ -35,24 +28,24 @@ module.exports = class ProductController extends AbstractController {
         // En cas de modification
         if(typeof request.params != 'undefined' && typeof request.params.id != 'undefined') {
             wait = new Promise((resolve,reject) => {
-                (new RealtyRepository(request)).findBy({id : request.params.id}).then((realty) => {
+                getFile.repository('RealtyRepository', request).findBy({id : request.params.id}).then((realty) => {
                     if(realty.length == 1 && realty[0].id_contact > 0) {
-                        (new ContactRepository(request)).findBy({id : realty[0].id_contact}).then((contact) => {
+                        getFile.repository('ContactRepository', request).findBy({id : realty[0].id_contact}).then((contact) => {
                             resolve({
-                                'realty' : this.dataToEntity(realty[0], new RealtyEntity()),
-                                'contact' : this.dataToEntity(contact[0], new ContactEntity())
+                                'realty' : this.dataToEntity(realty[0], getFile.entity('Realty')),
+                                'contact' : this.dataToEntity(contact[0], getFile.entity('Contact'))
                             });
                         });
                     } else { reject(); }
                 });
             });
         } else {
-            wait = Promise.resolve({'realty' : new RealtyEntity(), 'contact' : new ContactEntity()});
+            wait = Promise.resolve({'realty' : getFile.entity('Realty'), 'contact' : getFile.entity('Contact')});
         }
 
         wait.then((data) => {  
             // préparation du formulaire
-            let form = new RealtyType(data);
+            let form = getFile.form('RealtyType', data);
             form.handler(request);
             // si formulaire soumis
             if(form.isSubmit()) {
@@ -67,16 +60,16 @@ module.exports = class ProductController extends AbstractController {
                         if(     typeof contact.id != 'undefined' && contact.id > 0
                             &&  typeof realty.id != 'undefined' && realty.id > 0
                         ) {
-                            (new ContactRepository(request)).update(contact).then(() => {
-                                (new RealtyRepository(request)).update(realty).then(() => {
+                            getFile.repository('ContactRepository', request).update(contact).then(() => {
+                                getFile.repository('RealtyRepository', request).update(realty).then(() => {
                                     resolve(realty.id)
                                 });
                             });
                         } else {                 
-                            (new ContactRepository(request)).add(contact).then((idContact) => {
+                            getFile.repository('ContactRepository', request).add(contact).then((idContact) => {
                                 if(idContact > 0) {
                                     realty.id_contact = idContact;
-                                    (new RealtyRepository(request)).add(realty).then(resolve);
+                                    getFile.repository('RealtyRepository', request).add(realty).then(resolve);
                                 } else {
                                     reject();
                                 }
@@ -139,7 +132,7 @@ module.exports = class ProductController extends AbstractController {
         }
         if(idProduct > 0) {  
             // On va supprimer les photos du produits
-            (new RealtyRepository(request)).delete({id : idProduct}).then(() => {
+            getFile.repository('RealtyRepository', request).delete({id : idProduct}).then(() => {
                 request.flash('notify', `Le bien a été supprimé`);
                 response.redirect('/admin/product');
             });

@@ -1,5 +1,5 @@
-const UserRepository = require('../repository/UserRepository.js');
 const AbstractController = require('./AbstractController.js');
+const getFile = require('../../app/getFiles.js')();
 
 module.exports = class Authenticate extends AbstractController {
 
@@ -16,7 +16,7 @@ module.exports = class Authenticate extends AbstractController {
         }
         // on doit recevoir les champs email et password
         if(request.body.email != undefined && request.body.password != undefined) {
-            (new UserRepository).findByEmail(request.body.email).then((result) => {
+            getFile.repository('UserRepository').findByEmail(request.body.email).then((result) => {
                 if( typeof result != 'undefined') {
                     let bcrypt = require('bcryptjs');
                     console.log(bcrypt.compareSync(request.body.password, result.password));

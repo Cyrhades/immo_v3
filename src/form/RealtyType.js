@@ -7,7 +7,7 @@ module.exports = class RealtyType extends AbstractType {
         this.groupFieldsForm = {
             realty : {
                 seller : {
-                    pattern : '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,20}$',
+                    pattern : '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,80}$',
                     regError: 'Le nom ne doit pas comporter de caractères spéciaux',
                     maxlength: 80,
                     minlength: 1,
@@ -20,7 +20,7 @@ module.exports = class RealtyType extends AbstractType {
                     }
                 },
                 address1 : {
-                    pattern : '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?|=]{1,20}$',
+                    pattern : '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?|=]{1,80}$',
                     regError: `L'adresse ne doit pas comporter de caractères spéciaux`,
                     maxlength: 80,
                     minlength: 1,
@@ -33,7 +33,7 @@ module.exports = class RealtyType extends AbstractType {
                     }
                 },
                 address2 : {
-                    pattern : '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?|=]{1,20}$',
+                    pattern : '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?|=]{1,80}$',
                     regError: `L'adresse ne doit pas comporter de caractères spéciaux`,
                     maxlength: 80,
                     minlength: 0,
@@ -59,7 +59,7 @@ module.exports = class RealtyType extends AbstractType {
                     }
                 },
                 city : {
-                    pattern : '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?|=]{1,20}$',
+                    pattern : '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?|=]{1,80}$',
                     regError: `La ville ne doit pas comporter de caractères spéciaux`,
                     maxlength: 80,
                     required: false,
@@ -206,7 +206,7 @@ module.exports = class RealtyType extends AbstractType {
                     }
                 },
                 lastname : {
-                    pattern : '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,20}$',
+                    pattern : '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,40}$',
                     regError: 'Le nom ne doit pas comporter de caractères spéciaux',
                     maxlength: 40,
                     minlength: 1,
@@ -219,7 +219,7 @@ module.exports = class RealtyType extends AbstractType {
                     }
                 },
                 firstname : {
-                    pattern : '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,20}$',
+                    pattern : '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,]{1,40}$',
                     regError: 'Le prénom ne doit pas comporter de caractères spéciaux',
                     maxlength: 40,
                     minlength: 3,

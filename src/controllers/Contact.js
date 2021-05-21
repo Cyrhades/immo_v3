@@ -1,14 +1,10 @@
 const AbstractController = require('./AbstractController.js');
-const ContactEntity = require('../entity/Contact.js');
-const ContactRepository = require('../repository/ContactRepository.js');
-const ContactType = require('../form/ContactType.js');
-const RealtyRepository = require('../repository/RealtyRepository.js');
-
+const getFile = require('../../app/getFiles.js')();
 
 module.exports = class ContactController extends AbstractController {
 
     list(request, response) {
-        let repo = (new ContactRepository(request));
+        let repo = getFile.repository('ContactRepository', request); 
         let page = parseInt(request.query.page) || 1;
         let limit = 10;
         let offset = (limit*page)-limit;
@@ -30,18 +26,18 @@ module.exports = class ContactController extends AbstractController {
         // En cas de modification
         if(typeof request.params != 'undefined' && typeof request.params.id != 'undefined') {
             wait = new Promise((resolve,reject) => {
-                (new ContactRepository(request)).findBy({id : request.params.id}).then((contact) => {
-                    resolve(this.dataToEntity(contact[0], new ContactEntity()) );
+                getFile.repository('ContactRepository', request).findBy({id : request.params.id}).then((contact) => {
+                    resolve(this.dataToEntity(contact[0], getFile.entity('Contact')) );
                 });
             });
         } else {
-            wait = Promise.resolve(new ContactEntity());
+            wait = Promise.resolve(getFile.entity('Contact'));
         }
 
         
         wait.then((contact) => {
             // préparation du formulaire
-            let form = new ContactType(contact);
+            let form = getFile.form('ContactType', contact);
             form.handler(request);
             // si formulaire soumis
             if(form.isSubmit()) {
@@ -52,9 +48,9 @@ module.exports = class ContactController extends AbstractController {
                     let promise = null;
                     // si modification
                     if(typeof contact.id != 'undefined' && contact.id > 0) {
-                        promise = (new ContactRepository(request)).update(contact);
+                        promise = getFile.repository('ContactRepository', request).update(contact);
                     } else {
-                        promise = (new ContactRepository(request)).add(contact);
+                        promise = getFile.repository('ContactRepository', request).add(contact);
                     }
                     // quand l'enregistrement en BDD a été effectué
                     promise.then((result) => {
@@ -85,13 +81,21 @@ module.exports = class ContactController extends AbstractController {
         if(typeof request.params != 'undefined' && typeof request.params.id != 'undefined') {
             idContact = parseInt(request.params.id);
         }
-        if(idContact > 0) {  
-            (new ContactRepository(request)).delete({id : idContact}).then(() => {
-                // On sélection également les biens associés à ce contact ...
-                (new RealtyRepository(request)).findBy({id_contact : idContact}).then((result) => {
+        if(idContact > 0) { 
+            getFile.repository('ContactRepository', request).delete({id : idContact}).then(() => {
+                // On sélectionne également les biens associés à ce contact ...
+                let repoRealty = getFile.repository('RealtyRepository', request);
+                repoRealty.findBy({id_contact : idContact}).then((result) => {
                     // ... pour les supprimer
-                    request.flash('notify', `Le contact a été supprimé`);
-                    response.redirect('/admin/contact');
+                    let allRealties = [];
+                    result.forEach((el) => {
+                        allRealties.push(repoRealty.delete({id : el.id}));
+                    });
+
+                    Promise.all(allRealties).then(() => {
+                        request.flash('notify', `Le contact a été supprimé`);
+                        response.redirect('/admin/contact');
+                    });
                 });
             });
         } else {
