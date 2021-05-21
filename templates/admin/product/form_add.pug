@@ -21,53 +21,79 @@ block content
                         legend Adresse du bien
                         .col-lg-12 
                             .form-group
-                                label Nom du vendeur
-                                input.form-control(type="text" name="realty[seller]" maxlength="40" required placeholder="Nom du vendeur" value=product.seller)
+                                | !{form.error["realty[seller]"]} 
+                                | !{form.row["realty[seller]"]}
                         .col-lg-12 
                             .form-group
-                                label Adresse
-                                input.form-control(type="text" name="realty[address1]" maxlength="80" placeholder="Adresse" value=product.address1)
+                                | !{form.error["realty[address1]"]} 
+                                | !{form.row["realty[address1]"]}
                         .col-lg-12 
                             .form-group
-                                input.form-control(type="text" name="realty[address2]" maxlength="80" placeholder="suite adresse (facultatif)" value=product.address2)
+                                | !{form.error["realty[address2]"]} 
+                                | !{form.row["realty[address2]"]}
+                        .col-lg-6
+                            .form-group
+                                | !{form.error["realty[zipcode]"]} 
+                                | !{form.row["realty[zipcode]"]}
                         .col-lg-6 
                             .form-group
-                                label Code postal
-                                input.form-control(type="text" name="realty[zipcode]" maxlength="10" placeholder="Code postal" value=product.zipcode)
-                        .col-lg-6 
-                            .form-group
-                                label Ville
-                                input.form-control(type="text" name="realty[city]" maxlength="80" placeholder="Ville" value=product.city)
+                                | !{form.error["realty[city]"]} 
+                                | !{form.row["realty[city]"]}
                         .col-lg-12 
                             .form-group
-                                label Informations complémentaires
-                                textarea.form-control(name="realty[info_address]" style="height:200px;width:100%;" placeholder="Distances des transports en commun, commerces de proximités, etc")=product.info_address
+                                | !{form.error["realty[info_address]"]} 
+                                | !{form.row["realty[info_address]"]}
                 .col-xs-12.col-lg-6  
                     fieldset
                         legend Contact du bien
+                        
+                        | !{form.error["contact[civility]"]} 
+                        .input-group.mb-3
+                            .input-group-prepend
+                                .input-group-text.d-none.d-lg-block 
+                                    i.fa.fa-restroom
+                            | !{form.widget["contact[civility]"]}
+
+
+                        | !{form.error["contact[lastname]"]} 
+                        .input-group.mb-3
+                            .input-group-prepend
+                                .input-group-text.d-none.d-lg-block
+                                    i.fa.fa-user
+                            | !{form.widget["contact[lastname]"]}
+
+
+                        | !{form.error["contact[firstname]"]} 
+                        .input-group.mb-3
+                            .input-group-prepend
+                                .input-group-text.d-none.d-lg-block 
+                                    i.fa.fa-user
+                            | !{form.widget["contact[firstname]"]}
+
+                        
+                        | !{form.error["contact[email]"]} 
+                        .input-group.mb-3
+                            span.input-group-prepend
+                                span.input-group-text.d-none.d-lg-block 
+                                    i.fa.fa-envelope 
+                            | !{form.widget["contact[email]"]}         
+
+                        | !{form.error["contact[phone]"]} 
+                        .input-group.mb-3
+                            .input-group-prepend
+                                .input-group-text.d-none.d-lg-block
+                                    i.fa.fa-phone
+                            | !{form.widget["contact[phone]"]}
+
+                        | !{form.error["contact[mobile]"]} 
+                        .input-group.mb-3
+                            .input-group-prepend
+                                .input-group-text.d-none.d-lg-block
+                                    i.fa.fa-phone
+                            | !{form.widget["contact[mobile]"]}
                         .form-group
-                            label Civilité
-                            select.form-control(name="contact[civility]")
-                                option(value="1") Monsieur
-                                option(value="2" selected=product.contact.civility=="2") Madame
-                        .form-group
-                            label Nom
-                            input.form-control(name="contact[lastname]" type="text" placeholder="Nom" value=product.contact.lastname)
-                        .form-group
-                            label Prénom
-                            input.form-control(name="contact[firstname]" type="text" placeholder="Prénom" value=product.contact.firstname)
-                        .form-group
-                            label Email
-                            input.form-control(name="contact[email]" type="email" placeholder="Adresse mail" value=product.contact.email)
-                        .form-group
-                            label Mobile
-                            input.form-control(name="contact[mobile]" type="text" placeholder="Numéro de mobile" value=product.contact.mobile)
-                        .form-group
-                            label Téléphone
-                            input.form-control(name="contact[phone]" type="text" placeholder="Numéro de téléphone" value=product.contact.phone)
-                        .form-group
-                            label Informations complémentaires
-                            textarea.form-control(name="contact[info]" style="height:90px;width:100%;" placeholder="Disponibilités")=product.contact.info
+                            | !{form.error["contact[info]"]} 
+                            | !{form.row["contact[info]"]}
             .row
                 .col 
                     fieldset
@@ -76,24 +102,21 @@ block content
                             .col-xs-12.col-lg-6  
                                 .row
                                     .form-group
-                                        label Type de bien
-                                        select.form-control(name="realty[type]")
-                                            option(value="1") Maison
-                                            option(value="2" selected=product.type=="2") Appartement
-                                            option(value="3" selected=product.type=="3") Terrain
-                                            option(value="4" selected=product.type=="4") Parking
-                                            option(value="5" selected=product.type=="5") Local / Bureau 
-                                            option(value="6" selected=product.type=="6") Autres 
+                                        | !{form.error["realty[type]"]} 
+                                        | !{form.row["realty[type]"]}
                             
                                     .form-group
-                                        label Prix net vendeur
-                                        input.form-control(name="realty[price]" type="number" placeholder="Prix net vendeur" value=product.price)
+                                        | !{form.error["realty[price]"]} 
+                                        | !{form.row["realty[price]"]}
                         
                                     .form-group
-                                        label Commision
-                                        input.form-control(name="realty[amount_commission]" type="number" placeholder="Montant de commission" value=product.amount_commission)
+                                        | !{form.error["realty[amount_commission]"]} 
+                                        | !{form.row["realty[amount_commission]"]}
+                                       
                                     .form-group
-                                        input.form-control(name="realty[percentage_commission]" type="number" placeholder="% de commission" value=product.percentage_commission)
+                                        | !{form.error["realty[amount_commission]"]} 
+                                        | !{form.row["realty[percentage_commission]"]}
+                                        
                             .col-xs-12.col-lg-6  
                                 .row                 
                                     .lcUpload__block
@@ -106,25 +129,24 @@ block content
                         .row
                             .col-xs-12.col-lg-6    
                                 .form-group
-                                    label Surface (m²)
-                                    input.form-control(name="realty[area]" type="number" min="0" step="1" placeholder="Surface en m²" value=product.area)
+                                    | !{form.error["realty[area]"]} 
+                                    | !{form.row["realty[area]"]}
                             .col-xs-12.col-lg-6 
                                 .form-group
-                                    label Pièces
-                                    input.form-control(name="realty[room]" type="number" min="0" step="1" placeholder="Nombre de pièces" value=product.room)
+                                    | !{form.error["realty[room]"]} 
+                                    | !{form.row["realty[room]"]}
                             .col-xs-12.col-lg-6  
                                 .form-group
-                                    label Type de ventes
-                                    select.form-control(name="realty[type_product]")
-                                        option(value="1") Ancien
-                                        option(value="2" selected=product.type_product=="2") Neuf
-                                        option(value="3" selected=product.type_product=="3") Viager
+                                    | !{form.error["realty[type_product]"]} 
+                                    | !{form.row["realty[type_product]"]}
                         .col-lg-12 
                             .form-group
+                                | !{form.error["realty[info_realty]"]} 
+                                | !{form.row["contrealtyact[info_realty]"]}
                                 label Informations complémentaires sur le bien
-                                textarea.form-control(name="realty[info_realty]" style="height:90px;width:100%;" placeholder="Travaux à effectuer, classe énergie, GES, etc")=product.info_realty
-        
-                        textarea#homeRoughData(name="realty[plan]" style="display:none;")= product.plan
+                                textarea.form-control(name="realty[info_realty]" style="height:90px;width:100%;" placeholder="Travaux à effectuer, classe énergie, GES, etc")
+                        //- champs utilisé pour enregistrer le plan
+                        textarea#homeRoughData(name="realty[plan]" style="display:none;")
 
             .row.justify-content-center.mt-3
                 .col-2

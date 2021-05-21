@@ -62,13 +62,23 @@ module.exports = class RealtyType extends AbstractType {
                     pattern : '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?|=]{1,20}$',
                     regError: `La ville ne doit pas comporter de caractères spéciaux`,
                     maxlength: 80,
-                    minlength: 0,
                     required: false,
                     label : 'Ville',
                     type : 'text',
                     attr : {
                         class : "form-control",
                         placeholder : "Ville"
+                    }
+                },
+                info_address : {
+                    maxlength: 5000,
+                    required: false,
+                    label : 'Informations complémentaires',
+                    type : 'textarea',
+                    attr : {
+                        style : "height:200px;width:100%;",
+                        class : "form-control",
+                        placeholder : "Distances des transports en commun, commerces de proximités, etc"
                     }
                 },
                 type : {
@@ -159,6 +169,17 @@ module.exports = class RealtyType extends AbstractType {
                         3 : 'Viager'
                     }
                 },
+                info_realty : {
+                    maxlength: 5000,
+                    required: false,
+                    label : 'Informations complémentaires sur le bien',
+                    type : 'textarea',
+                    attr : {
+                        style : "height:90px;width:100%;",
+                        class : "form-control",
+                        placeholder : "Travaux à effectuer, classe énergie, GES, etc"
+                    }
+                },
             },
             contact : {
                 email : {
@@ -229,7 +250,18 @@ module.exports = class RealtyType extends AbstractType {
                         class : "form-control",
                         placeholder : "Mobile"
                     }
-                }
+                },
+                info : {
+                    maxlength: 5000,
+                    required: false,
+                    label : 'Informations complémentaires',
+                    type : 'textarea',
+                    attr : {
+                        style : "height:90px;width:100%;",
+                        class : "form-control",
+                        placeholder : "Disponibilités"
+                    }
+                },
             }
         };
         return this;

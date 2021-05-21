@@ -36,6 +36,8 @@ module.exports = class AbstractController {
     }
 
     formToEntity(form, entity) {
+        if(entity === null || entity === undefined) entity = {};
+        
         let entityDescriptor = Object.getOwnPropertyDescriptors(entity);
         // on boucle sur les éléments du formulaire
         Object.keys(form).forEach((key) => {

@@ -53,14 +53,14 @@ module.exports = (app) => {
 
     // ajout de produit
     app.route("/admin/product/add")
-        .get(csrf.token, Product.formAddProcess2.bind(Product))
-        .post(urlencodedParser, uploadFile, /*csrf.verify,*/ Product.formAddProcess2.bind(Product))
+        .get(csrf.token, Product.formAddProcess.bind(Product))
+        .post(urlencodedParser, uploadFile, /*csrf.verify,*/ Product.formAddProcess.bind(Product))
         .all(errorsHTTP.error405);    
 
     // modification de produit
     app.route("/admin/product/edit/:id")
-        .get(csrf.token, Product.formAddProcess2.bind(Product))
-        .post(urlencodedParser, uploadFile,  /*csrf.verify,*/ Product.formAddProcess2.bind(Product))
+        .get(csrf.token, Product.formAddProcess.bind(Product))
+        .post(urlencodedParser, uploadFile,  /*csrf.verify,*/ Product.formAddProcess.bind(Product))
         .all(errorsHTTP.error405);    
 
     // suppression de produit

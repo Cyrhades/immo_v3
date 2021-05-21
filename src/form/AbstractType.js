@@ -1,5 +1,6 @@
 module.exports = class AbstractType {
     constructor(entity = null) {
+ 
         this.defaultErrors = {
             regError: 'Le champ ne correspond pas à une valeur attendue',
             maxError: 'Le champs doit contenir au maximum %maxlength% caractères',
@@ -56,6 +57,13 @@ module.exports = class AbstractType {
             Object.keys(this.groupFieldsForm).forEach((nameGroup) => {
                 Object.keys(this.groupFieldsForm[nameGroup]).forEach((key) => {
                     this.fieldsForm[`${nameGroup}[${key}]`] = this.groupFieldsForm[nameGroup][key]; 
+                    if( typeof this.dataEntity[nameGroup] != 'undefined' 
+                        &&
+                        typeof this.dataEntity[nameGroup][key] != 'undefined'
+                    ) {
+                        // On adapte la value au systeme de groupe
+                        this.dataEntity[`${nameGroup}[${key}]`] = this.dataEntity[nameGroup][key];
+                    }
                 });
             });
         }
@@ -98,6 +106,9 @@ module.exports = class AbstractType {
                 case 'select' :                 
                     return  this.getSelect(key);
                     break;
+                case 'textarea' :                 
+                    return  this.getTextarea(key);
+                    break;
             }
         } else {
             // par défaut on considére comme un champ texte
@@ -124,7 +135,7 @@ module.exports = class AbstractType {
         if(typeof this.fieldsForm[key].regError != 'undefined') {
             attrs += ` title="${this.fieldsForm[key].regError}"`;
         }
-        if(typeof this.fieldsForm[key].required != 'undefined') {
+        if(typeof this.fieldsForm[key].required != 'undefined'  && this.fieldsForm[key].required === true) {
             attrs += ` required`;
         }
         
@@ -158,17 +169,63 @@ module.exports = class AbstractType {
                 data[key] = this.dataEntity[key];
             }
         }
-
-        if(typeof data[key] != 'undefined') {
+  
+        if(typeof data[key] == 'string') {
             attrs += ` value="${data[key].replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;").replace(/"/g, "&quot;")}"`;        
         }
         return `<input type="${type}"${attrs}>`;   
-    }    
+    } 
+    
+    getTextarea(key) {
+        let attrs = ` id="${key}" name="${key}"`;
+        if(typeof this.fieldsForm[key].maxlength != 'undefined') {
+            attrs += ` maxlength="${this.fieldsForm[key].maxlength}"`;
+        }
+        if(typeof this.fieldsForm[key].required != 'undefined'  && this.fieldsForm[key].required === true) {
+            attrs += ` required`;
+        }
+        
+        // On boucle sur les attributs propre à HTML
+        if(typeof this.fieldsForm[key].attr != 'undefined') {
+            Object.keys(this.fieldsForm[key].attr).forEach((name) => {
+                attrs += ` ${name}="${this.fieldsForm[key].attr[name]}"`;
+            });
+        }
+
+        // si le formulaire à été soumis
+        let data = [];        
+        if (typeof this.request.body != 'undefined') {
+            if(typeof this.request.body[key] != 'undefined') {
+                data[key] = this.request.body[key];
+            }
+            let className = (typeof this.errors[key] != 'undefined' 
+                ? `is-invalid`
+                : 'is-valid'
+            );
+            if(attrs.indexOf('class="')== -1)  {
+                attrs += ` class="${className}"`;
+            }
+            else {
+                attrs = attrs.replace( `class="`,  `class="${className} `);
+            }   
+        } 
+        else if (typeof this.dataEntity != 'undefined') {
+            if(typeof this.dataEntity[key] != 'undefined') {
+                data[key] = this.dataEntity[key];
+            }
+        }
+
+        let content = '';
+        if(typeof data[key] == 'string') {
+            content = data[key].replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;").replace(/"/g, "&quot;");        
+        }
+        return `<textarea${attrs}>${content}</textarea>`;   
+    }   
 
     getSelect(key) {
         let options = '';
         let attrs = ` id="${key}" name="${key}"`;
-        if(typeof this.fieldsForm[key].required != 'undefined') {
+        if(typeof this.fieldsForm[key].required != 'undefined' && this.fieldsForm[key].required === true) {
             attrs += ` required`;
         }
 

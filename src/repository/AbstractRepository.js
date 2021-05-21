@@ -68,6 +68,7 @@ module.exports = class AbstractRepository {
                     if (error) reject(error.message);
                     else resolve(results);
                 });
+                entity['id'] = whereId;
             } else {
                 reject();
             }
